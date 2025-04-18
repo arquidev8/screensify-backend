@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.routers import auth, users, projects, screens
+from app.api.routers import auth, users, projects, screens, component_instances
 from app.core.config import settings
 from app.db.session import engine
 from app.db.base_class import Base
@@ -29,6 +29,7 @@ app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(users.router, prefix=settings.API_V1_STR)
 app.include_router(projects.router, prefix=settings.API_V1_STR)
 app.include_router(screens.router, prefix=settings.API_V1_STR)
+app.include_router(component_instances.router, prefix=settings.API_V1_STR)
 
 @app.get("/")
 async def root():

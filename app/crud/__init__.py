@@ -3,3 +3,4 @@
 from .crud_user import user
 from .crud_project import project
 from .crud_screen import screen
+from .crud_component_instance import componentinstance

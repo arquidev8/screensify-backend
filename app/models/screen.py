@@ -18,3 +18,4 @@ class Screen(Base):
     
     # Relaciones
     project = relationship("Project", back_populates="screens")
+    instances = relationship("ComponentInstance", back_populates="screen", cascade="all, delete-orphan")
