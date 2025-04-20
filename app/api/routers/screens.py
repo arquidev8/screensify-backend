@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from app import crud, models, schemas
 from app.api import deps
+from app.api.code_exporter import generate_screen_code
 
 router = APIRouter(prefix="/screens", tags=["screens"])
 
@@ -47,6 +48,20 @@ def read_screen(
     if not screen or screen.project.owner_id != current_user.id:
         raise HTTPException(status_code=404, detail="Pantalla no encontrada o sin acceso")
     return screen
+
+
+@router.get("/{screen_id}/generated_code")
+def get_generated_code(
+    screen_id: int,
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    # Verificar acceso
+    screen = crud.screen.get(db, id=screen_id)
+    if not screen or screen.project.owner_id != current_user.id:
+        raise HTTPException(status_code=404, detail="Pantalla no encontrada o sin acceso")
+    code = generate_screen_code(db, screen_id)
+    return {"code": code}
 
 
 @router.put("/{screen_id}", response_model=schemas.Screen)
